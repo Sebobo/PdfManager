@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "itbz/fpdf": "1.7.2",
-        "itbz/fpdi": "1.5.2"
+        "setasign/fpdi": "^2.0",
+        "setasign/fpdf": "^1.8"
     },
     "minimum-stability": "dev"
 }

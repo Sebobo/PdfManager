@@ -3,18 +3,18 @@
 namespace DocDigital\Lib\PdfManager\Fpdi;
 
 use DocDigital\Lib\PdfManager\Pdf;
-use fpdi\FPDI as Fpdi;
+use setasign\Fpdi\Fpdi;
 
 /**
- *    
+ *
  * @author Juan Manuel Fernandez <juanmf@gmail.com>
  */
 class FpdiPdf extends Fpdi implements Pdf
 {
-    
+
     /**
      * To accomplish engine specifics.
-     * 
+     *
      * @return mixed The underlying object providing functionality
      */
     public function getEngine()
@@ -24,10 +24,10 @@ class FpdiPdf extends Fpdi implements Pdf
 
     /**
      * Must import an exsting PDF and allow to continue working with it.
-     * 
+     *
      * @param string|Pdf $filename        Either the path or an other Pdf Instance
-     * @param boolean    $onlyPreImported If $filename is a Pdf Instance, it might 
-     * have already imported just some pages of its {@link FPDI#currentFilename}. 
+     * @param boolean    $onlyPreImported If $filename is a Pdf Instance, it might
+     * have already imported just some pages of its {@link FPDI#currentFilename}.
      * if this is the case, respect that page selection instead of importing all.
      * Optional, defaults to false.
      */
@@ -38,7 +38,7 @@ class FpdiPdf extends Fpdi implements Pdf
             if (! ($filename instanceof Pdf)) {
                 return;
             }
-            
+
             foreach ($filename->_importedPages as $k => $tplId) {
                 // Recycling $filename's Tpls
                 $tpl = $filename->_tpls[$tplId];
@@ -46,24 +46,24 @@ class FpdiPdf extends Fpdi implements Pdf
                 $this->_tpls[$this->tpl] = $tpl;
                 $this->_importedPages[$k] = $this->tpl;
                 //use the imported page and place it at point 0,0; calculate width and height
-                //automaticallay and ajust the page size to the size of the imported page 
+                //automaticallay and ajust the page size to the size of the imported page
                 $this->addPage();
-                $this->useTemplate($this->tpl, null, null, 0, 0, true); 
+                $this->useTemplate($this->tpl, 0, 0, null, null, true);
             }
             return;
         }
         for ($i = 1; $i <= $pages; $i++) {
             $this->addPage();
             //use the imported page and place it at point 0,0; calculate width and height
-            //automaticallay and ajust the page size to the size of the imported page 
-            $this->useTemplate($this->importPage($i), null, null, 0, 0, true); 
+            //automaticallay and ajust the page size to the size of the imported page
+            $this->useTemplate($this->importPage($i), 0, 0, null, null, true);
         }
     }
-    
+
     /**
-     * overrides setSourceFile to replace currentParser if $filename is already a 
+     * overrides setSourceFile to replace currentParser if $filename is already a
      * Pdf instance.
-     * 
+     *
      * @param Pdf|string $filename
      */
     public function setSourceFile($filename)
@@ -84,7 +84,7 @@ class FpdiPdf extends Fpdi implements Pdf
         $this->currentParser = $this->parsers[$newPdf->currentFilename];
         return $this->currentParser->getPageCount();
     }
-    
+
     /*
      * Adds a new page to the document.
      *
@@ -99,23 +99,23 @@ class FpdiPdf extends Fpdi implements Pdf
     {
         return parent::AddPage($orientation, $format, $keepmargins, $tocpage);
     }
-    
+
     public function setFont($family, $style = '', $size = null, $fontfile = '', $subset = 'default', $out = true)
     {
         return parent::setFont($family, $style, $size, $fontfile, $subset, $out);
     }
-            
+
     public function setXY($x, $y)
     {
         return parent::SetXY($x, $y);
     }
-    
+
     public function setX($x)
     {
         return parent::SetX($x);
     }
-    
-    public function setY($y)
+
+    public function setY($y, $resetX = true)
     {
         return parent::SetY($y);
     }
